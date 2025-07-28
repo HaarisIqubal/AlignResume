@@ -1,0 +1,14 @@
+[project]
+name = "cv-maker"
+version = "0.1.0"
+description = "Project is made to for adding advance process for CV making."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "beautifulsoup4>=4.13.4",
+    "docling>=2.42.2",
+    "html2text>=2025.4.15",
+    "langchain>=0.3.26",
+    "sentence-transformers>=5.0.0",
+    "streamlit>=1.47.0",
+]
