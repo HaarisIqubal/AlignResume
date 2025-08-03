@@ -3,6 +3,7 @@ import tempfile
 from ..tool.document_extractor import extract_pdf_document
 from ..tool.job_extractor import extract_job_detail
 from .text_state_manager import text_manager
+from ..tool.resume_extractor import extract_resume_detail
 
 def sidebar_view():
     with st.sidebar:
@@ -15,7 +16,11 @@ def sidebar_view():
                     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
                             tmp_file.write(docs_file.read())
                             tmp_file_path = tmp_file.name
-                    text_manager.set_text('resume_text', extract_pdf_document(tmp_file_path))
+                    markdown_content = extract_pdf_document(tmp_file_path)
+                    text_manager.set_text('resume_text', markdown_content)
+                    resume_structure = extract_resume_detail(markdown_content)
+                    text_manager.set_text('resume_extraction', resume_structure.model_dump_json(indent=2))
+                    
                     
 
         job_link = st.text_input("Enter Job portal URL", type="default")

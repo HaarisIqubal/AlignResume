@@ -11,8 +11,10 @@ class TextStateManager:
         """Initialize the text states dictionary if it doesn't exist."""
         if 'text_states' not in st.session_state:
             st.session_state.text_states = {
-                'resume_text': "",
-                'job_description': ""
+                'resume_text': '',
+                'resume_extraction':'',
+                'job_description': '',
+                'job_extraction': ''
             }
     
     def set_text(self, key: str, value: str) -> None:
