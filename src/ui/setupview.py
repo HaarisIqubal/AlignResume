@@ -10,32 +10,49 @@ def setup_view():
     # Initialize multiple text states using a dictionary
     if 'text_states' not in st.session_state:
         st.session_state.text_states = {
-            'extracted_resume': "",
-            'job_description': ""
+            'resume_text': '',
+            'resume_extraction':'',
+            'job_description': '',
+            'job_extraction': ''
         }
     
     
     sidebar_view()
 
     resume_text = text_manager.get_text("resume_text")
+    resume_extraction = text_manager.get_text("resume_extraction")
+    job_extraction = text_manager.get_text('job_extraction')
     job_description = text_manager.get_text("job_description")
     st.header("Resume Data")
     if len(resume_text) > 0:
-        st.success("Resume Extracted ✅")
+        st.success("Resume Text ✅")
         with st.expander("View Resume Content"):
             st.text(resume_text)
     else:
         st.info("No resume uploaded yet.")
 
+    if len(resume_extraction) > 0:
+        st.success("Resume extraction")
+        with st.expander("View resume structure"):
+            st.text(resume_extraction)
+    else:
+        st.info("No resume uploaded yet.")
+
     st.header("Job Description")
     if len(job_description) > 0:
-        st.success("Job Description is extracted ✅")
+        st.success("Job description is extracted ✅")
         with st.expander("View job extracted Content"):
             st.markdown(job_description)
     else:
         st.info("No job description extracted yet")
 
-
+    if len(job_extraction) > 0:
+        st.success("Job extraction is done ✅")
+        with st.expander("View job extracted structure"):
+            st.markdown(job_extraction)
+    else:
+        st.info("No job description extracted yet")
+    
     st.header("Comparison and Gap Table")
 
     st.header("Generated CV")

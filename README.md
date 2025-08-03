@@ -29,7 +29,7 @@ An intelligent CV/Resume builder that automates the process of creating tailored
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd cv_maker
+   cd AlignResume
    ```
 
 2. **Create virtual environment** (recommended)
