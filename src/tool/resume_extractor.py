@@ -1,13 +1,22 @@
 import json
 from langchain.output_parsers import PydanticOutputParser
 from langchain_core.prompts import PromptTemplate
-from langchain_ollama import ChatOllama
-from langchain_core.runnables import Runnable
-from langchain.schema.output_parser import StrOutputParser
 from ..model.ResumeSchema import Personal
+from .llm_manager import llm_manager
 
-def extract_resume_detail(resume_raw_data: str) -> Personal:
-    """Extract structured resume information using LLM"""
+def extract_resume_detail(raw_data: str) -> Personal:
+    """
+    Extract structured resume information using LLM.
+    Parameters
+    ----------
+    resume_data_data : str
+        The string of raw extracted data from the pdf.
+
+    Returns
+    -------
+    resume_model : Personal
+            This will return the value of personal in formatted way of pydantic.
+    """
     prompt = PromptTemplate(
     template="""Extract structured information from the following resume and return it as a JSON object.
     Resume:
@@ -17,12 +26,12 @@ def extract_resume_detail(resume_raw_data: str) -> Personal:
         input_variables=["resume_text","format_instructions"]
     )
     parser = PydanticOutputParser(pydantic_object=Personal)
-    chain = _init_ollama_llm(prompt=prompt)
+    chain = llm_manager.init_llm_chain(prompt=prompt)
 
     try:
-        raw_output = chain.invoke({"resume_text": resume_raw_data,
+        raw_output = chain.invoke({"resume_text": raw_data,
                                     "format_instructions": parser.get_format_instructions()})
-        raw_output = _cleanup_llm_output(raw_output)
+        raw_output = llm_manager.cleanup_llm_output(raw_output)
         parsed_json = json.loads(raw_output)
         resume_model = Personal(**parsed_json)
         return resume_model
@@ -31,18 +40,3 @@ def extract_resume_detail(resume_raw_data: str) -> Personal:
         return Personal(name="None", email="None", phone="None", education=[],experience=[])
     finally:
         print("Finally passed")
-
-
-def _init_ollama_llm(prompt: PromptTemplate) -> Runnable:
-    """Initialize Ollama LLM with prompt chain"""
-    language_model = ChatOllama(model="gemma3n:e4b", temperature=0)
-    chain:Runnable = prompt | language_model | StrOutputParser()
-    return chain
-
-def _cleanup_llm_output(raw_output: str) -> str:
-    """Clean up LLM output to extract pure JSON"""
-    if raw_output.startswith("```json"):
-        raw_output = raw_output[len("```json"):].lstrip()
-    if raw_output.endswith("```"):
-        raw_output = raw_output[:-3].rstrip()
-    return raw_output.strip()
