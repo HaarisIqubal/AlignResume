@@ -4,7 +4,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_ollama import ChatOllama
 from langchain_core.runnables import Runnable
 from langchain.schema.output_parser import StrOutputParser
-from ..model.resume_schema import Personal
+from ..model.ResumeSchema import Personal
 
 def extract_resume_detail(resume_raw_data: str) -> Personal:
     """Extract structured resume information using LLM"""

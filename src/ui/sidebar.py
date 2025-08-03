@@ -1,9 +1,10 @@
 import streamlit as st
 import tempfile
 from ..tool.document_extractor import extract_pdf_document
-from ..tool.job_extractor import extract_job_detail
+from ..tool.job_crawler import crawl_job_detail
 from .text_state_manager import text_manager
 from ..tool.resume_extractor import extract_resume_detail
+from ..tool.job_extractor import extract_job_posting_detail
 
 def sidebar_view():
     with st.sidebar:
@@ -27,8 +28,11 @@ def sidebar_view():
 
         if st.button("Extract job description"):
             if len(job_link) > 0:
-                extracted_job = extract_job_detail(job_link)
-                text_manager.set_text("job_description", extracted_job)
+                crawl_job = crawl_job_detail(job_link)
+                text_manager.set_text("job_description", crawl_job)
+                extracted_job_posting = extract_job_posting_detail(crawl_job)
+                text_manager.set_text("job_extraction", extracted_job_posting.model_dump_json(indent=2))
+
 
 
         cv_description = st.text_area("Enter your CV description.")
