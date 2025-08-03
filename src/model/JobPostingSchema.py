@@ -1,20 +1,20 @@
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
 from typing import Optional, List
 
 class JobPosting(BaseModel):
-    job_title: Optional[str]
-    department: Optional[str]
-    job_type: Optional[str]
-    start_date: Optional[str]
-    location: Optional[str]
-    remote_option: Optional[str]
-    travel_requirement: Optional[str]
+    job_title: Optional[str] = None
+    department: Optional[str] = None
+    job_type: Optional[str] = None
+    start_date: Optional[str] = None
+    location: Optional[str] = None
+    remote_option: Optional[str] = None
+    travel_requirement: Optional[str] = None
 
-    education_level: Optional[str]
+    education_level: Optional[str] = None
     education_fields: List[str] = []
     certifications_required: List[str] = []
 
-    experience_years: Optional[str]
+    experience_years: Optional[str] = None
     experience_domains: List[str] = []
     project_examples: List[str] = []
 
@@ -27,36 +27,36 @@ class JobPosting(BaseModel):
     performance_indicators: List[str] = []
     personal_traits: List[str] = []
 
-    legal_eligibility: Optional[str]
-    work_authorization: Optional[str]
-    relocation_support: Optional[str]
+    legal_eligibility: Optional[str] = None
+    work_authorization: Optional[str] = None
+    relocation_support: Optional[str] = None
 
-    employer_name: Optional[str]
-    employer_type: Optional[str]
+    employer_name: Optional[str] = None
+    employer_type: Optional[str] = None
     company_culture: List[str] = []
     mission_focus: List[str] = []
-    diversity_inclusion: Optional[str]
+    diversity_inclusion: Optional[str] = None
 
-    application_mode: Optional[str]
+    application_mode: Optional[str] = None
     application_requirements: List[str] = []
-    interview_stages: Optional[str]
+    interview_stages: Optional[str] = None
     selection_criteria: List[str] = []
 
-    salary_range: Optional[str]
-    posting_date: Optional[str]
-    application_deadline: Optional[str]
-    job_reference_id: Optional[str]
+    salary_range: Optional[str] = None
+    posting_date: Optional[str] = None
+    application_deadline: Optional[str] = None
+    job_reference_id: Optional[str] = None
 
-    reporting_to: Optional[str]
-    team_size: Optional[str]
-    cross_functional: Optional[bool]
+    reporting_to: Optional[str] = None
+    team_size: Optional[str] = None
+    cross_functional: Optional[bool] = None
     internal_collaboration: List[str] = []
     external_stakeholders: List[str] = []
 
     strategic_goals: List[str] = []
     transformation_initiatives: List[str] = []
     success_metrics: List[str] = []
-    leadership_expectations: Optional[str]
-    decision_making_scope: Optional[str]
+    leadership_expectations: Optional[str] = None
+    decision_making_scope: Optional[str] = None
     learning_opportunities: List[str] = []
-    career_path: Optional[str]
+    career_path: Optional[str] = None
