@@ -1,0 +1,192 @@
+{
+  "job_title": [
+    [
+      "Scrum Master",
+      "word_phrase"
+    ]
+  ],
+  "job_type": [
+    [
+      "Full-Time",
+      "sentence"
+    ]
+  ],
+  "responsibilities": [
+    [
+      "Establishing agile principles and methods",
+      "sentence"
+    ],
+    [
+      "Building a supportive agile work model",
+      "sentence"
+    ],
+    [
+      "Moderating retrospectives and workshops",
+      "word_phrase"
+    ],
+    [
+      "Supporting the team leader and development team",
+      "sentence"
+    ],
+    [
+      "Promoting continuous improvement",
+      "word_phrase"
+    ],
+    [
+      "Ensuring adherence to agile frameworks",
+      "sentence"
+    ],
+    [
+      "Assisting in removing obstacles",
+      "word_phrase"
+    ],
+    [
+      "Encouraging self-organization",
+      "sentence"
+    ],
+    [
+      "Conducting training and coaching",
+      "word_phrase"
+    ],
+    [
+      "Supporting sprint planning and execution",
+      "sentence"
+    ],
+    [
+      "Ensuring transparent communication",
+      "word_phrase"
+    ],
+    [
+      "Promoting collaboration and knowledge sharing",
+      "sentence"
+    ]
+  ],
+  "education_level": [
+    [
+      "Bachelor's degree",
+      "sentence"
+    ]
+  ],
+  "education_fields": [
+    [
+      "Computer Science",
+      "word_phrase"
+    ],
+    [
+      "Information Technology",
+      "word_phrase"
+    ],
+    [
+      "Business",
+      "word"
+    ],
+    [
+      "Related Field",
+      "word_phrase"
+    ]
+  ],
+  "experience_years": [
+    [
+      "3+",
+      "sentence"
+    ]
+  ],
+  "experience_domains": [
+    [
+      "Scrum Master",
+      "word_phrase"
+    ],
+    [
+      "Agile Coach",
+      "word_phrase"
+    ]
+  ],
+  "hard_skills": [
+    [
+      "Jira",
+      "word"
+    ],
+    [
+      "Confluence",
+      "word"
+    ],
+    [
+      "Project Management Software",
+      "word_phrase"
+    ]
+  ],
+  "soft_skills": [
+    [
+      "Communication Skills",
+      "word_phrase"
+    ],
+    [
+      "Problem-solving",
+      "sentence"
+    ],
+    [
+      "Conflict Resolution",
+      "word_phrase"
+    ],
+    [
+      "Emotional Intelligence",
+      "word_phrase"
+    ],
+    [
+      "Self-motivation",
+      "sentence"
+    ],
+    [
+      "Teamwork",
+      "word"
+    ],
+    [
+      "Multitasking",
+      "word"
+    ],
+    [
+      "Organizational Skills",
+      "word_phrase"
+    ],
+    [
+      "Time Management",
+      "word_phrase"
+    ],
+    [
+      "Verbal Communication",
+      "word_phrase"
+    ],
+    [
+      "Written Communication",
+      "word_phrase"
+    ]
+  ],
+  "tools_platforms": [
+    [
+      "Jira",
+      "word"
+    ],
+    [
+      "Confluence",
+      "word"
+    ]
+  ],
+  "languages_required": [
+    [
+      "English",
+      "word"
+    ]
+  ],
+  "location": [
+    [
+      "Romania",
+      "word"
+    ]
+  ],
+  "employer_name": [
+    [
+      "Schaeffler Romania S.R.L.",
+      "sentence"
+    ]
+  ]
+}
