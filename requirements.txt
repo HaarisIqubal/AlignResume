@@ -130,7 +130,9 @@ charset-normalizer==3.4.2 \
     --hash=sha256:f0aa37f3c979cf2546b73e8222bbfa3dc07a641585340179d768068e3455e544 \
     --hash=sha256:fcbe676a55d7445b22c10967bceaaf0ee69407fbe0ece4d032b6eb8d4565982a \
     --hash=sha256:fdb20a30fe1175ecabed17cbf7812f7b804b8a315a25f24678bcdf120a90077f
-    # via requests
+    # via
+    #   reportlab
+    #   requests
 click==8.2.1 \
     --hash=sha256:27c491cc05d968d271d5a1db13e3b5a184636d9d930f148c50b038f0d0646202 \
     --hash=sha256:61a3265b914e850b85317d0b3109c7f8cd35a670f963866005d6ef1d5175a12b
@@ -990,6 +992,7 @@ pillow==11.3.0 \
     #   easyocr
     #   imageio
     #   python-pptx
+    #   reportlab
     #   scikit-image
     #   sentence-transformers
     #   streamlit
@@ -1185,6 +1188,10 @@ pygments==2.19.2 \
 pylatexenc==2.10 \
     --hash=sha256:3dd8fd84eb46dc30bee1e23eaab8d8fb5a7f507347b23e5f38ad9675c84f40d3
     # via docling
+pypdf2==3.0.1 \
+    --hash=sha256:a74408f69ba6271f71b9352ef4ed03dc53a31aa404d29b5d31f53bfecfee1440 \
+    --hash=sha256:d16e4205cfee272fbdc0568b68d82be796540b1537508cef59388f839c191928
+    # via cv-maker
 pypdfium2==4.30.0 \
     --hash=sha256:0dfa61421b5eb68e1188b0b2231e7ba35735aef2d867d86e48ee6cab6975195e \
     --hash=sha256:119b2969a6d6b1e8d55e99caaf05290294f2d0fe49c12a3f17102d01c441bd29 \
@@ -1374,6 +1381,10 @@ regex==2024.11.6 \
     # via
     #   tiktoken
     #   transformers
+reportlab==4.4.3 \
+    --hash=sha256:073b0975dab69536acd3251858e6b0524ed3e087e71f1d0d1895acb50acf9c7b \
+    --hash=sha256:df905dc5ec5ddaae91fc9cb3371af863311271d555236410954961c5ee6ee1b5
+    # via cv-maker
 requests==2.32.4 \
     --hash=sha256:27babd3cda2a6d50b30443204ee89830707d396671944c998b5975b031ac2b2c \
     --hash=sha256:27d0316682c8a29834d3264820024b62a36942083d52caf2f14c0591336d3422

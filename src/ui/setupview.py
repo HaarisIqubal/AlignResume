@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 from .sidebar import sidebar_view
 from .text_state_manager import text_manager
@@ -54,7 +55,7 @@ def setup_view():
     resume_extraction = text_manager.get_text("resume_extraction")
     job_extraction = text_manager.get_text('job_extraction')
     job_description = text_manager.get_text("job_description")
-    st.header("Resume Data")
+    st.subheader("Resume Data")
     if len(resume_text) > 0:
         st.success("Resume Text ✅")
         with st.expander("View Resume Content"):
@@ -69,7 +70,7 @@ def setup_view():
     else:
         st.info("No resume uploaded yet.")
 
-    st.header("Job Description")
+    st.subheader("Job Description")
     if len(job_description) > 0:
         st.success("Job description is extracted ✅")
         with st.expander("View job extracted Content"):
@@ -84,9 +85,21 @@ def setup_view():
     else:
         st.info("No job description extracted yet")
     
-    st.header("Comparison and Gap Table")
+    st.subheader("Comparison and Gap Table")
 
-    st.header("Generated CV")
+    st.subheader("Generated CV")
+    # Download button
+
+    result = text_manager.get_resume_result()
+    if result.get('edited_pdf_path') and os.path.exists(result['edited_pdf_path']):
+        with open(result['edited_pdf_path'], "rb") as pdf_file:
+            st.download_button(
+                label="📥 Download Tailored Resume",
+                data=pdf_file.read(),
+                file_name="tailored_resume.pdf",
+                mime="application/pdf",
+                key="download_tailored_resume"
+            )
 
 def _validate_llm_config() -> bool:
     """Validate LLM configuration"""
