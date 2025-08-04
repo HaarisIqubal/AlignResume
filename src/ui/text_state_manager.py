@@ -14,7 +14,8 @@ class TextStateManager:
                 'resume_text': '',
                 'resume_extraction':'',
                 'job_description': '',
-                'job_extraction': ''
+                'job_extraction': '',
+                'llm_config': ''
             }
     
     def set_text(self, key: str, value: str) -> None:

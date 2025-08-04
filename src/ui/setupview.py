@@ -1,12 +1,43 @@
 import streamlit as st
 from .sidebar import sidebar_view
 from .text_state_manager import text_manager
+from ..tool.llm_manager import llm_manager
 
 def setup_view():
     st.set_page_config(page_title='CV Maker', page_icon='📑', layout='centered')
     st.title('Automize the process of CV making  📑')
     st.write("This app helps you to make the process of CV making a breeze.")
+
+    st.subheader("🤖 LLM Configuration")
+
+    #Provider selection
+    provider = st.selectbox(
+        "Select LLM Provider",
+        options=list(llm_manager.providers.keys()),
+        key="llm_provider"
+    )
     
+    # Model selection based on provider
+    available_models = llm_manager.get_available_models(provider)
+    model = st.selectbox(
+        "Select Model",
+        options=available_models,
+        key="llm_model"
+    )
+
+    
+    # Store LLM config in session state
+    st.session_state.llm_config = {
+        "provider": provider,
+        "model": model    
+        }
+    # Show current configuration
+    with st.expander("Current LLM Config"):
+        st.write(f"**Provider:** {provider}")
+        st.write(f"**Model:** {model}")
+    
+    st.divider()
+
     # Initialize multiple text states using a dictionary
     if 'text_states' not in st.session_state:
         st.session_state.text_states = {
@@ -56,3 +87,16 @@ def setup_view():
     st.header("Comparison and Gap Table")
 
     st.header("Generated CV")
+
+def _validate_llm_config() -> bool:
+    """Validate LLM configuration"""
+    config = st.session_state.get('llm_config', {})
+    
+    if not config.get('provider') or not config.get('model'):
+        return False
+    
+    provider = config.get('provider')
+    if llm_manager.requires_api_key(provider) and not config.get('api_key'):
+        return False
+    
+    return True
