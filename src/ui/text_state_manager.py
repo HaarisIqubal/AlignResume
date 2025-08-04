@@ -1,5 +1,5 @@
 import streamlit as st
-from typing import Dict
+from typing import Dict, Any
 
 class TextStateManager:
     """A utility class to manage multiple text states in Streamlit session state."""
@@ -15,7 +15,8 @@ class TextStateManager:
                 'resume_extraction':'',
                 'job_description': '',
                 'job_extraction': '',
-                'llm_config': ''
+                'llm_config': '',
+                'resume_generation_result': {}
             }
     
     def set_text(self, key: str, value: str) -> None:
@@ -29,6 +30,24 @@ class TextStateManager:
         if 'text_states' not in st.session_state:
             self._initialize_states()
         return st.session_state.text_states.get(key, "")
+    
+    def set_resume_result(self, result: Dict[str, Any]) -> None:
+        """Set the resume generation result."""
+        if 'text_states' not in st.session_state:
+            self._initialize_states()
+        st.session_state.text_states['resume_generation_result'] = result
+        # Also store in direct session state for easy access
+        st.session_state.resume_generation_result = result
+    
+    def get_resume_result(self) -> Dict[str, Any]:
+        """Get the resume generation result."""
+        if 'text_states' not in st.session_state:
+            self._initialize_states()
+        # Try text_states first, then direct session state
+        result = st.session_state.text_states.get('resume_generation_result', {})
+        if not result:
+            result = st.session_state.get('resume_generation_result', {})
+        return result
     
     def get_all_texts(self) -> Dict[str, str]:
         """Get all text states."""
@@ -45,7 +64,13 @@ class TextStateManager:
         """Clear all text states."""
         if 'text_states' in st.session_state:
             for key in st.session_state.text_states:
-                st.session_state.text_states[key] = ""
+                st.session_state.text_states[key] = "" if isinstance(st.session_state.text_states[key], str) else {}
+        
+        # Clear additional session state items
+        st.session_state.original_pdf_path = None
+        st.session_state.llm_config = {}
+        if 'resume_generation_result' in st.session_state:
+            del st.session_state.resume_generation_result
     
     def has_text(self, key: str) -> bool:
         """Check if a specific key has non-empty text."""
