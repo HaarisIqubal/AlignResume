@@ -8,11 +8,15 @@ class Experience(BaseModel):
     end_date: Optional[str]
     description: Optional[str]
     experience_domain: List[str] = Field( "this should be list of domains of the description above")
+    keywords = List[str] = Field('A list of 1 keyword each from all the experiences from the past')
+    previous_job_titles: List[str] = Field('A list of all the job titles from the past')
+
 
 class Total_Experience(BaseModel):
     experience_years: Optional[str] = None
     experience_domains: List[str] = []
     project_examples: List[str] = []
+    certifications: List[str] = Field('Any certification done is listed here as a List of certificates if not from a solid vendor, it can be left.')
 
 class Education(BaseModel):
     degree: str
