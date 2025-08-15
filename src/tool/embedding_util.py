@@ -1,12 +1,10 @@
-from src.model.JobPostingSchema import JobPosting
+
 from src.tool.llm_manager import llm_manager
 from langchain.schema.output_parser import StrOutputParser
 from langchain_core.prompts import PromptTemplate
 import ast
-from typing import List, Tuple, Any,Iterable, Sequence
-import re
-import json
-
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
 
 # def is_single_word(text: str) -> bool:
@@ -51,133 +49,68 @@ import json
 
 #     return field_type_map
 
-# def get_similar_terms_from_llm(term: str, api_key: str) -> list[str]:
-#     prompt = PromptTemplate(
-#     template="""You are a helpful assistant. For the term '{term}', generate a list of 5 closely related words or short phrases. These should capture synonyms, related job titles, and conceptually similar terms. Avoid full sentences. Keep short phrases. Make sure you do not leave anything empty. Only return a Python list of strings.""",
-#         input_variables=["term"]
-#     )
-    
-#     parser = StrOutputParser()
-#     chain = llm_manager.init_llm_chain(prompt=prompt)
-#     try:
-#         sim_word_list = chain.invoke({"term": term})
-#         return sim_word_list
-#     except Exception as e:
-#         print(f"Exception {e}")
-#         return 
-#     finally:
-#         print("Finally passed")
+def get_similar_terms_from_llm(input_list: list, api_key: str, similar_k=10) -> list[list]:
+    prompt = PromptTemplate(
+    # template="""You are a helpful assistant. For the term '{term}', generate a list of 5 closely related words or short phrases. These should capture synonyms, related job titles, and conceptually similar terms. Avoid full sentences. Keep short phrases. Make sure you do not leave anything empty. Only return a Python list of strings.""",
+    #     input_variables=["term"]
 
-
-def transform_input_to_output_with_llm(
-    input_format: Iterable[Sequence[str]],   # supports list of tuples or lists
-    similar_k: int = 10
-) -> List[List[Any]]:
-    """
-    Transform [(key, value), ...] (or [[key, value], ...]) into
-    [[key, [value, sim1..simK]], ...] using a single LLM call with strict JSON output.
-
-    Args:
-        input_format: Iterable of 2-item sequences (tuples or lists) of strings.
-        api_key:      API key for the underlying LLM (used by llm_manager).
-        similar_k:    Number of similar terms to include (default 10).
-        max_tokens:   Model output cap (passed via llm_manager if supported).
-        temperature:  Sampling temperature.
-
-    Returns:
-        output_format: [[key, [value, sim1..simK]], ...]
-    """
-
-    # --- Normalize and validate input: accept tuples/lists, enforce len=2 and str types ---
-    normalized: List[List[str]] = []
-    for idx, pair in enumerate(input_format):
-        if not (isinstance(pair, (list, tuple)) and len(pair) == 2):
-            raise ValueError(f"Item {idx} must be a 2-item tuple/list. Got: {pair!r}")
-        key, value = pair[0], pair[1]
-        if not isinstance(key, str) or not isinstance(value, str):
-            raise ValueError(f"Both key and value must be strings at index {idx}. Got: {pair!r}")
-        normalized.append([key, value])
-
-    # --- Prompt with strict JSON contract ---
     template = f"""
-You are a meticulous data wrangler. Your job is to transform an input list of [key, value] pairs into an output list where each item is:
-[key, [value, similar_1, similar_2, ..., similar_{similar_k}]]
+    You are a meticulous data wrangler. Your job is to transform an input list of [key, value] pairs into a FLAT output list.
+    For each input pair (key, value) in the {input_list}, emit a block of {similar_k + 1} rows in this order:
+    1) [key, value]    # original value verbatim
+    2) [key, sim1]
+    3) [key, sim2]
+    ...
+    {similar_k + 1}) [key, sim{similar_k}]
 
-"Similar words" means concise synonyms or closely related terms for the entire value phrase (domain-relevant skills, functions, tools, or concepts). Optimize for usefulness in search/matching.
+    IMPORTANT KEY RULES (MUST FOLLOW EXACTLY):
+    - Keys MUST be copied VERBATIM from the input. Do not add, remove, or alter any characters.
+    - Never invent new keys, never duplicate substrings, never change separators or casing.
+    - If a key is 'skills.soft_skills', every row in that block MUST have 'skills.soft_skills' as the key.
 
-STRICT RULES:
-1) Output MUST be valid, minified JSON only. No comments, no prose, no code fences.
-2) For every item: the second element is a list of EXACTLY {similar_k + 1} strings:
-   - the original value as the first element,
-   - followed by {similar_k} distinct, high-quality similar terms.
-3) Terms: keep each ≤3 words; avoid duplicates; avoid acronyms-only entries unless widely recognized.
-4) Use American English; Title Case only for proper nouns; otherwise sentence case is fine.
-5) If a value has multiple themes, distribute the similar terms across those themes.
-6) No filler words (e.g., "etc."), no meaningless numbers. Include standards (e.g., "ISO 31000") only if clearly relevant.
-7) Preserve the original value text verbatim as the first element.
+    "Similar words" means concise synonyms or closely related terms for the entire value phrase (domain-relevant skills, functions, tools, or concepts). Optimize for usefulness in search/matching.
 
-Return JSON ONLY in this exact structure:
-[
-  [key1, [value1, sim1, sim2, ..., sim{similar_k}]],
-  [key2, [value2, sim1, sim2, ..., sim{similar_k}]],
-  ...
-]
+    STRICT RULES:
+    1) Output MUST be valid, minified JSON only. No comments, no prose, no code fences.
+    2) For EACH input pair, output EXACTLY {similar_k + 1} rows: first the original value (verbatim), then {similar_k} distinct, high-quality similar terms.
+    3) Terms: keep each ≤3 words; avoid duplicates; avoid acronyms-only entries unless widely recognized.
+    4) Use American English; Title Case only for proper nouns; otherwise sentence case is fine.
+    5) If a value has multiple themes, distribute the similar terms across those themes.
+    6) No filler words (e.g., "etc."), no meaningless numbers. Include standards (e.g., "ISO 31000") only if clearly relevant.
+    7) Preserve the original value text verbatim for the first row of each block.
+    8) Preserve the exact input order: the output must be blocks in the same order as the input pairs.
 
-Here is input_format:
-{{input_json}}
-""".strip()
-
-    prompt = PromptTemplate(template=template, input_variables=["input_json"])
-    parser = StrOutputParser()
-
-    chain = llm_manager.init_llm_chain(
-        prompt=prompt
+    Return JSON ONLY in this exact structure (FLAT list):
+    [
+    [key1, value1],
+    [key1, sim1],
+    [key1, sim2],
+    ...
+    [key1, sim{similar_k}],
+    [key2, value2],
+    [key2, sim1],
+    ...
+    [key2, sim{similar_k}],
+    ...
+    ]
+    Here is input_format:
+    {input_list}
+    """.strip(),
+    input_variables=["input_list"]
     )
-
+    parser = StrOutputParser()
+    chain = llm_manager.init_llm_chain(prompt=prompt)
     try:
-        input_json = json.dumps(normalized, ensure_ascii=False, separators=(",", ":"))
-        raw = chain.invoke({"input_json": input_json})
-
-        # Strip optional code fences just in case
-        cleaned = raw.strip()
-        if cleaned.startswith("```"):
-            cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", cleaned, flags=re.IGNORECASE | re.DOTALL).strip()
-
-        data = json.loads(cleaned)
-
-        # Validate structure and lengths
-        def is_str_list(x):
-            return isinstance(x, list) and all(isinstance(i, str) for i in x)
-
-        output: List[List[Any]] = []
-        for idx, item in enumerate(data):
-            if not (isinstance(item, list) and len(item) == 2):
-                raise ValueError(f"Item {idx} is not [key, list]. Got: {item!r}")
-            key, val_list = item[0], item[1]
-            if not isinstance(key, str) or not is_str_list(val_list):
-                raise ValueError(f"Invalid types at index {idx}. Got: {item!r}")
-
-            # Enforce exact length (value + similar_k)
-            needed = similar_k + 1
-            if len(val_list) < needed:
-                last = val_list[-1] if val_list else ""
-                val_list = val_list + [last] * (needed - len(val_list))
-            elif len(val_list) > needed:
-                val_list = val_list[:needed]
-
-            output.append([key, val_list])
-
-        return output
-
-    except json.JSONDecodeError as e:
-        print("Failed to parse LLM JSON. Raw output was:\n", raw)
-        raise e
+        output_format = chain.invoke({"input_list": input_list})
+        # print('1St line')
+        # print(output_format)
+        output_format = cleanup_llm_output_json(output_format)
+        return output_format
     except Exception as e:
-        print(f"Exception: {e}")
-        raise
+        print(f"Exception {e}")
+        return 
     finally:
         print("Finally passed")
-
 
 
 
@@ -185,6 +118,16 @@ def cleanup_llm_output(raw_output: str) -> str:
         """Clean up LLM output to extract pure JSON"""
         if raw_output.startswith("```python"):
             raw_output = raw_output[len("```python"):].lstrip()
+        if raw_output.endswith("```"):
+            raw_output = raw_output[:-3].rstrip()
+        raw_output = raw_output.strip()
+        word_list = ast.literal_eval(raw_output)
+        return word_list
+
+def cleanup_llm_output_json(raw_output: str) -> str:
+        """Clean up LLM output to extract pure JSON"""
+        if raw_output.startswith("```json"):
+            raw_output = raw_output[len("```json"):].lstrip()
         if raw_output.endswith("```"):
             raw_output = raw_output[:-3].rstrip()
         raw_output = raw_output.strip()
@@ -255,3 +198,24 @@ def embed_field_values(model, flat_fields):
                 "embedding": vector.tolist()  # convert numpy to list for JSON saving
             })
     return embedded
+
+def similarity_for_a_field(embeddings_resume,embeddings_job_post, field_name, threshold=0.5):
+    matrix = []
+    for field_resume in embeddings_resume:
+        field_path_resume = field_resume['field_path']
+        resume_original_text = field_resume["original_text"]
+        if(field_path_resume==field_name):
+            embedding_resume_skill = np.array(field_resume['embedding']).reshape(1,-1)
+            for field_job_post in embeddings_job_post:
+                field_path_job_post = field_job_post['field_path']  
+                job_post_original_text = field_job_post["original_text"]
+                if(field_path_job_post==field_name):
+                    embedding_job_post_hard_skill = np.array(field_job_post['embedding']).reshape(1,-1)
+                    similarity_score = cosine_similarity(embedding_resume_skill, embedding_job_post_hard_skill)[0][0]
+                    if(similarity_score>=threshold):
+                        matrix.append([resume_original_text, job_post_original_text, similarity_score])
+                else:
+                    pass
+        else:
+            pass
+    return matrix
