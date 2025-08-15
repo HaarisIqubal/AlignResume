@@ -1,0 +1,185 @@
+{
+  "name": "Shubham Gupta",
+  "email": "g.shubham1@outlook.com",
+  "phone": "(+49) 15510186370",
+  "education": [
+    {
+      "degree": "Bachelor of Technology",
+      "institution": "Vellore Institute of Technology",
+      "start_data": "July 2016",
+      "end_data": "April 2020",
+      "education_field": "Computer Science and Engineering"
+    },
+    {
+      "degree": "M.Sc.",
+      "institution": "Friedrich-Alexander University Erlangen-Nuremberg",
+      "start_data": "October 2023",
+      "end_data": "Current",
+      "education_field": "Data Science"
+    }
+  ],
+  "experience": [
+    {
+      "title": "Part-time Data Scientist",
+      "company": "Siemens Healthineers Treasury",
+      "start_date": "June 2024",
+      "end_date": "Present",
+      "description": "- Collaborated with various finance teams and worked on creating a centralized data catalog using Snowflake, improving data accessibility to business users using Power BI.\n- Researched business viability of using LLMs like transformer architecture for time series forecasting by using Foundational Models like TimeGPT, Chronos.\n- Researched and implemented liquidity forecasting using LSTM and other Deep Learning Models, leveraging PyTorch and TensorFlow. Replicated LSTM based on recent research approaches to improve the liquidity forecast at enterprise level. Analyzed various time-series libraries such as Orbit, Prophet, pmdarima, darts, and pytorchts to find the best fit for the use case."
+    },
+    {
+      "title": "Software Development Engineer (AD Analyzer)",
+      "company": "Tata Consultancy Services Limited (TCS)",
+      "start_date": "September 2020",
+      "end_date": "September 2023",
+      "description": "- Developed a web application with Java Web Technologies to create an AD group analysis tool with a Single Sign-On (SSO) feature, reducing process time by 30%.\n- Worked as part of the DevOps team, deploying various enhancements in collaboration with the Development Team. Increased efficiency, reduced manual efforts, resulted in $25K annual cost saving."
+    },
+    {
+      "title": "Backend Web Developer (Competency Radar)",
+      "company": "Tata Consultancy Services Limited (TCS)",
+      "start_date": "September 2020",
+      "end_date": "September 2023",
+      "description": "- Developed a web application in Java using Spring Boot to manage employee competencies and a dashboard to enhance user skills. The application used a monolithic architecture with Liquidbase for database transactions, Hibernate as an ORM, and a GitHub Actions pipeline to deploy the application on Azure Cloud.\n- Other skills learned: SQL, GitHub, Agile Methodology."
+    },
+    {
+      "title": "Data Scientist (Well Tracker)",
+      "company": "Tata Consultancy Services Limited (TCS)",
+      "start_date": "September 2020",
+      "end_date": "September 2023",
+      "description": "- Developed and deployed similarity-based (cosine similarity, Euclidean distance) and clustering (k-median) algorithms for an MVP using Python libraries and MLFlow.\n- Collaborated with the team to implement MLOps using MLFlow, where deployed models were constantly monitored and retrained based on new data from vendors via ETL pipelines.\n- Analyzed, mined, and visualized data received from vendors in QlikSense for better business decisions."
+    },
+    {
+      "title": "Machine Learning Intern - NLP",
+      "company": "Tata Consultancy Services Limited (TCS)",
+      "start_date": "January 2020",
+      "end_date": "March 2020",
+      "description": "- Effectively enhanced system performance. Major responsibilities included data collection and feature selection. Contributed to the model selection process.\n- Researched various classical NLP methods like Tokenization, Lemmatization and Stemming.\n- Implemented Bag-of-Words and TF-IDF for feature extraction."
+    }
+  ],
+  "total_experience": {
+    "experience_years": "3+ years",
+    "experience_domains": [
+      "Data Science",
+      "Machine Learning",
+      "Software Development",
+      "Web Development",
+      "DevOps",
+      "Treasury/Finance",
+      "Healthcare/Medical",
+      "Natural Language Processing",
+      "Time Series Analysis"
+    ],
+    "project_examples": [
+      "Climate Change and Its Burn on Pocket - Cost of Living Crisis: Aimed at finding trends to mitigate risks posed by climate change and ensure the availability and affordability of basic needs. Major analysis included: How rising global temperatures affect the cost of living worldwide and impact of rising temperatures on global crop production. Implemented various stages of software lifecycle, including project planning, CI/CD pipeline creation, GitHub Actions, automated testing, and project deployment.",
+      "Point Prevalence Analysis App for Infectious Disease Stewardship: Developed a web application to assist infectious disease specialists in point prevalence analysis and supporting antimicrobial stewardship effort. Interviewed multiple Infectious Diseases Specialists to translate complex medical workflows into app features, enabling streamlined data entry, analysis, and reporting. Facilitated education for non-specialist physicians using RAG using finetuned GPT3.5 Turbo. Utilized Pinecone vector for embeddings. Deployed using a Docker container. Project is still in progress.",
+      "ToolAct - X-AI way to understand Time Series Classification: Researched on various intrinsic and post-hoc explainability methods for ML and Deep Learning models. Implemented the whole Feature-Training-Inference (FTI) pipeline for the project. Utilized recent research in X-AI implemented baseline approaches like SHAP to gradient-based approaches for Transformers and LSTMs like attention and weight analysis using DeepLIFT and integrated gradients."
+    ]
+  },
+  "skills": {
+    "hard_skills": [
+      "TensorFlow",
+      "Keras",
+      "PyTorch",
+      "scikit-learn",
+      "NumPy",
+      "Matplotlib",
+      "LLMs",
+      "Fine-Tuning",
+      "RAG",
+      "LSTM",
+      "Deep Learning",
+      "Time Series Forecasting",
+      "TimeGPT",
+      "Chronos",
+      "Orbit",
+      "Prophet",
+      "pmdarima",
+      "darts",
+      "pytorchts",
+      "Cosine Similarity",
+      "Euclidean Distance",
+      "K-median",
+      "X-AI",
+      "SHAP",
+      "DeepLIFT",
+      "Integrated Gradients",
+      "SQL",
+      "Power Query",
+      "Data Cataloging",
+      "ETL pipelines",
+      "Data Mining",
+      "Data Visualization",
+      "Snowflake",
+      "Python",
+      "Java",
+      "Spring Boot",
+      "Hibernate",
+      "Java Web Technologies",
+      "SSO",
+      "Tokenization",
+      "Lemmatization",
+      "Stemming",
+      "Bag-of-Words",
+      "TF-IDF",
+      "CI/CD pipeline",
+      "Automated Testing",
+      "Deployment"
+    ],
+    "soft_skills": [
+      "Collaboration",
+      "Research",
+      "Analysis",
+      "Problem-solving",
+      "Agile Methodology",
+      "Project Planning",
+      "Interviewing",
+      "Education Facilitation"
+    ],
+    "tools_platforms": [
+      "GitLab",
+      "GitHub",
+      "GitHub Actions",
+      "Docker",
+      "MLFlow",
+      "Azure AI Studio",
+      "Azure Cloud",
+      "AWS Bedrock",
+      "Pinecone",
+      "Hugging Face",
+      "Streamlit",
+      "Snowflake",
+      "Power BI",
+      "QlikSense",
+      "Jira",
+      "Confluence",
+      "Microsoft Office",
+      "Langchain",
+      "Liquidbase"
+    ],
+    "languages_required": [
+      "English",
+      "Deutsch"
+    ]
+  },
+  "responsibilities": {
+    "responsibilities": [
+      "Collaborated with finance teams on creating a centralized data catalog and improving data accessibility.",
+      "Researched business viability of LLMs for time series forecasting.",
+      "Implemented liquidity forecasting using LSTM and other Deep Learning Models.",
+      "Developed web applications with Java Web Technologies and Spring Boot.",
+      "Deployed various enhancements as part of the DevOps team.",
+      "Implemented MLOps for continuous model monitoring and retraining.",
+      "Analyzed, mined, and visualized data for business decisions.",
+      "Conducted data collection and feature selection for ML models.",
+      "Researched and implemented classical NLP methods.",
+      "Managed software lifecycle stages including project planning, CI/CD pipeline creation, automated testing, and deployment.",
+      "Interviewed stakeholders to translate complex workflows into app features.",
+      "Facilitated education for non-specialist physicians using AI tools.",
+      "Researched intrinsic and post-hoc explainability methods for ML/Deep Learning models.",
+      "Implemented Feature-Training-Inference (FTI) pipelines."
+    ],
+    "personal_traits": [],
+    "transformation_initiatives": [],
+    "leadership_expectations": null,
+    "decision_making_scope": null
+  }
+}

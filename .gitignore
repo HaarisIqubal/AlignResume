@@ -11,3 +11,7 @@ venv/
 
 # Environment key
 .env.local
+
+
+#archives
+archives/
