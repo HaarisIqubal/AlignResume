@@ -1,7 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 import re
-from typing import Optional
+import json
+import html
 import html2text
 
 def crawl_job_detail(url: str) -> str:
@@ -19,23 +20,22 @@ def crawl_job_detail(url: str) -> str:
     """
     try:
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Referer': 'https://www.google.com/',
-            'Connection': 'keep-alive',
-            'Upgrade-Insecure-Requests': '1'
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Cookie": "cookie_consent_accepted=true; other_cookie=other_value",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Referer": "https://www.google.com/",
+        "Connection": "keep-alive",
+        "Upgrade-Insecure-Requests": "1",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "cross-site",
+        "Sec-Fetch-User": "?1"
         }
-        response = requests.get(url, timeout=100, headers=headers, verify=False, allow_redirects=True)
+        response = requests.get(url, timeout=10, headers=headers, allow_redirects=True)
         response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'html.parser')
-        print(f"Response status: {response.status_code}")
-        print(f"Response length: {len(response.text)}")
-        print(f"First 200 chars: {response.text[:200]}")
-
-        # print(soup)
-        # Remove unwanted elements
+        soup = BeautifulSoup(response.text, 'html5lib')
         soup = clean_html_content(soup)
         
         # Extract job title and description
@@ -52,6 +52,22 @@ def crawl_job_detail(url: str) -> str:
     except Exception as e:
         return f"Error processing content: {str(e)}"
 
+def extract_job_description_from_jsonld(soup: BeautifulSoup) -> str:
+    """Scraping the value from jsonld file and able to give the desired job posting output."""
+    for script in soup.find_all("script", type="application/ld+json"):
+        try:
+            data = json.loads(script.string)
+            # If the script contains a list, iterate through it
+            if isinstance(data, list):
+                for entry in data:
+                    if entry.get("@type") == "JobPosting" and "description" in entry:
+                        return html.unescape(entry["description"])
+            # If it's a dict
+            elif data.get("@type") == "JobPosting" and "description" in data:
+                return html.unescape(data["description"])
+        except Exception:
+            continue
+    return ""
 
 def clean_html_content(soup: BeautifulSoup) -> BeautifulSoup:
     """Return unwanted cleanup html tags requires for job description"""
@@ -90,6 +106,16 @@ def clean_html_content(soup: BeautifulSoup) -> BeautifulSoup:
         for element in soup.find_all(id=re.compile(id_name, re.I)):
             element.decompose()
 
+    # Remove cookie consent banners
+    cookie_keywords = ['cookie', 'consent', 'gdpr', 'eu-cookie', 'cc-banner', 'cookie-banner']
+    for keyword in cookie_keywords:
+        # Remove by class
+        for tag in soup.find_all(class_=re.compile(keyword, re.I)):
+            tag.decompose()
+        # Remove by id
+        for tag in soup.find_all(id=re.compile(keyword, re.I)):
+            tag.decompose()
+
     # Remove link tags
     for link in soup.find_all('a'):
         link.unwrap()
@@ -97,7 +123,7 @@ def clean_html_content(soup: BeautifulSoup) -> BeautifulSoup:
     return soup
 
 
-def extract_job_title(soup: BeautifulSoup) -> Optional[str]:
+def extract_job_title(soup: BeautifulSoup) -> str:
     """Extract job title from the page"""
 
     # Common selectors for job titles
@@ -125,14 +151,26 @@ def extract_job_title(soup: BeautifulSoup) -> Optional[str]:
 
 def extract_job_description(soup: BeautifulSoup) -> str:
     """Extract job description from the page and convert to markdown"""
+    
+    # Try JSON-LD first
+    jsonld_desc = extract_job_description_from_jsonld(soup)
+    if jsonld_desc and len(jsonld_desc.strip()) > 50:
+        return jsonld_desc
 
     description_selectors = [
         '[class*="job-description"]',
         '[class*="description"]',
         '[class*="job-detail"]',
         '[class*="job-content"]',
+        '[class*="position-details"]',
+        '[class*="position-job-container"]',
+        '[class*="wrapper-content"]',
         '[id*="job-description"]',
         '[id*="description"]',
+        '[id*="jobdetails-jobsummary"]',
+        '[id*="jobdetails-jobdescription-titleheading"]',
+        '[id*="jobdetails-minimumqualifications-titleheading"]',
+        '[id*="jobdetails-preferredqualifications-titleheading"]',
         'main',
         'article',
         '.content',
@@ -141,14 +179,18 @@ def extract_job_description(soup: BeautifulSoup) -> str:
         '#job-description'
     ]
 
+    markdown_candidates = []
     for selector in description_selectors:
         desc_element = soup.select_one(selector)
         if desc_element:
-            # Convert HTML to markdown while preserving structure
             markdown_content = html_to_markdown(desc_element)
-            if markdown_content and len(markdown_content.strip()) > 100:
-                return markdown_content
+            if markdown_content and len(markdown_content.strip()) > 50:
+                markdown_candidates.append(markdown_content)
     
+    if markdown_candidates:
+        # Return the longest markdown content (or you can change logic as needed)
+        return max(markdown_candidates, key=len)
+
     # Fallback: try to find the main content area
     main_content = soup.find('main') or soup.find('article')
     if main_content:
