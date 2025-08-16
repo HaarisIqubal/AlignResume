@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/HaarisIqubal/AlignResume/blob/main/LICENSE.txt">
-    <img src="https://img.shields.io/badge/license-GPL3.0-blue.svg" alt="Align Resume is released under the MIT license." />
+    <img src="https://img.shields.io/badge/license-GPL3.0-blue.svg" alt="Align Resume is released under the GPL3.0 license." />
   </a>
 </p>
 
@@ -100,8 +100,11 @@ An intelligent CV/Resume builder that automates the process of creating tailored
 ## 📃 Documentation
 
 1. [How to use](https://github.com/HaarisIqubal/AlignResume/wiki/Usage-Guide)
-2. [Project Structure](https://github.com/HaarisIqubal/AlignResume/wiki/Project-Structure)
-3. [Contribution Guide](https://github.com/HaarisIqubal/AlignResume/wiki/Contribution-Guide)
+2. [Project structure](https://github.com/HaarisIqubal/AlignResume/wiki/Project-Structure)
+3. [Development guide](https://github.com/HaarisIqubal/AlignResume/wiki/Development-Guide)
+4. [Contribution guide](https://github.com/HaarisIqubal/AlignResume/wiki/Contribution-Guide)
+5. [How to use](https://github.com/HaarisIqubal/AlignResume/wiki/Usage-Guide)
+6. [Future enhancement](https://github.com/HaarisIqubal/AlignResume/wiki/Future-Enhancement)
 
 ## 💾 Supported File Formats
 
@@ -116,10 +119,6 @@ An intelligent CV/Resume builder that automates the process of creating tailored
 - **Streamlit Display**: Interactive web interface
 - **Downloadable PDF**: User can download the resume from the internet
 
-## 📄 License
-
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.txt](LICENSE.txt) file for details.
-
 ## ➕ Support
 
 For support, bug reports, or feature requests:
@@ -132,6 +131,4 @@ For support, bug reports, or feature requests:
 
 ---
 
-<center><strong>Developed with ❤️ for automated resume building from 🇩🇪.</strong> </center>
-
----
+<p align="center">><strong>Developed with ❤️ for automated resume building from 🇩🇪.</strong> </p>
